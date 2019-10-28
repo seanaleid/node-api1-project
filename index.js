@@ -17,7 +17,16 @@ server.get('/', (req, res) => {
     res.send("Hello from Sean's computer.")
 })
 
-// handles POST requests to / on localhost:8000
+// GET from /api/users
+server.get('/api/users', (req, res, err) => {
+    if(err){
+        res.status(500).json({ message: "The users information could not be retrieved."})
+    } else{
+        res.status(200).json({db})
+    }
+})
+
+// handles POST requests to / on localhost:8000/api/users
 server.post('/api/users', (req, res) =>{
     const userInfo = req.body;
 
