@@ -18,12 +18,29 @@ server.get('/', (req, res) => {
 })
 
 // GET from /api/users
-server.get('/api/users', (req, res, err) => {
-    if(err){
-        res.status(500).json({ message: "The users information could not be retrieved."})
-    } else{
-        res.status(200).json({db})
+server.get('/api/users', (req, res) => {
+    
+    db.find()
+        .then(user => {
+            res.status(200).json(user);
+        })
+        .catch(err => {
+            res.status(500).json({ message: "The users information could not be retrieved."});
+        })
     }
+)
+
+// GET from /api/user/:id
+server.get(`/api/users/:id`, (req,res) => {
+    // this is how we get the id, comes form the user in the form of a request with information (body)
+    const id = req.params.id
+    db.findById(id)
+        .then(user => {
+            res.status(200).json(user);
+        })
+        .catch(err => {
+            res.status(500).json({ error: "The user information could not be retrieved."});
+        })
 })
 
 // handles POST requests to / on localhost:8000/api/users
@@ -52,6 +69,20 @@ server.post('/api/users', (req, res) =>{
 
 
 // handles DELETE requests to / on localhost:8000
+server.delete(`/api/users/:id`, (req, res) => {
+    db.remove(req.body.id, )
+        .then(count => {
+            if(count === 0){
+                res.status(404).json({ message: "The user with the specified ID does not exist."})
+            } else {
+                console.log(`the user was deleted`, count)
+                res.status(200).json({ message: `user with id deleted`, count })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: "The user could not be removed"})
+        })
+})
 
 
 // listen for requests in a particular post on localhost
