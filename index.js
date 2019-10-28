@@ -12,12 +12,32 @@ server.use(express.json()); // teaches express how to read JSON
 // we need ^^^ for the POST and PUT to work
 
 // handles GET requests to / on localhost:8000
+// INITIAL GET REQUEST
 server.get('/', (req, res) => {
     res.send("Hello from Sean's computer.")
 })
 
 // handles POST requests to / on localhost:8000
+server.post('/api/users', (req, res) =>{
+    const userInfo = req.body;
 
+    console.log('user information', userInfo);
+
+    if(!userInfo.name || !userInfo.bio){
+        res.status(400).json({
+            errorMessage: "Please provide name and bio for the user."
+        })
+    } else {
+    db.insert(userInfo)
+        .then(user => {
+            res.status(201).json({user});
+        })
+        .catch(err => {
+            console.log('POST ERROR users', err);
+            res.status(500).json({ error: "There was an error while saving the user to the database"});
+        });
+    }
+});
 
 // handles PUT requests to / on localhost:8000
 
