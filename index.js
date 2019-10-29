@@ -34,8 +34,10 @@ server.get('/api/users', (req, res) => {
 server.get(`/api/users/:id`, (req,res) => {
     // this is how we get the id, comes form the user in the form of a request with information (body)
     // const id = req.params.id
-    db.findById(req.body.id)
+    console.log(req.params.id);
+    db.findById(req.params.id)
         .then(user => {
+            console.log(user);
             if(!!user){
                 res.status(200).json(user);
             } else {
@@ -71,7 +73,7 @@ server.post('/api/users', (req, res) =>{
 
 // handles PUT requests to / on localhost:8000
 server.put(`/api/users/:id`, (req, res) => {
-    db.update(req.body.id, req.body)
+    db.update(req.params.id, req.body)
         .then(changes => {
             if(changes === 0 ){
                 res.status(404).json({ message: "The user with the specified ID does not exist." })
@@ -89,7 +91,7 @@ server.put(`/api/users/:id`, (req, res) => {
 
 // handles DELETE requests to / on localhost:8000
 server.delete(`/api/users/:id`, (req, res) => {
-    db.remove(req.body.id, )
+    db.remove(req.params.id, )
         .then(count => {
             if(count === 0){
                 res.status(404).json({ message: "The user with the specified ID does not exist."})
